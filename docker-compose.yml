@@ -1,10 +1,30 @@
 version: '3.9'
 services:
+  schedoomdb:
+    container_name: schedoomdb
+    image: postgres
+    volumes:
+      - './data/db:/var/lib/postgresql/data/'
+      - './rootfolderdb:/root'
+      - './scriptdb:/scriptdb'
+    ports:
+      - '5433:5432'
+    environment:
+      - POSTGRES_DB=schedoomdb
+      - POSTGRES_USER=schedoomdb
+      - POSTGRES_PASSWORD=schedoomdb
   schedoom:
     container_name: schedoom
     build: .
-    command: flask run --host=0.0.0.0 -p 8000
+    command: flask --debug run --host=0.0.0.0 -p 8000
     volumes:
       - '.:/code'
     ports:
       - '8000:8000'
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8090:8080
